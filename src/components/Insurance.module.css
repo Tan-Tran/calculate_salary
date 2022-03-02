@@ -1,0 +1,17 @@
+.insurance{
+    width: 100%;
+}
+
+.insurance .content{
+    margin-bottom: 20px;
+}
+
+.insurance span{
+    margin-right: 8px;
+}
+
+.title{
+    font-weight: bold;
+    color: #3B5998;
+    margin-bottom: 5px;
+}

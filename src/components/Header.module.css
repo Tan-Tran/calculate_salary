@@ -1,0 +1,12 @@
+.container{
+    background-color: #EDEDED;
+    padding: 5px 5px 5px 5px;
+    margin-bottom: 15px;
+}
+
+.header{
+    width: 620px;
+    font-size: 18px;
+    color: rgb(69, 97, 150);
+    margin:0 auto;
+}

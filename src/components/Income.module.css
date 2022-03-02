@@ -1,0 +1,21 @@
+.income{
+    width: 100%
+}
+
+.tittle{
+    font-weight: bold;
+    color: #3B5998;
+    margin-bottom: 5px;
+}
+
+.income span{
+    margin-right: 8px;
+}
+
+.income input{
+    font-size: 12px;
+}
+
+.income .content{
+    margin-bottom: 20px;
+}
