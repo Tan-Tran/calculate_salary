@@ -6,6 +6,7 @@ import Insurance from './components/Insurance'
 import Reduction from './components/Reduction'
 import Card from './UI/Card'
 import Button from './UI/Button'
+import ShowResult from './components/ShowResult'
 import './App.css'
 
 const initialRegion = [
@@ -31,13 +32,13 @@ const initialRegion = [
   }
 ]
 
-const initialValue = {
-  incomeValues: {
-    VND: '10000000',
-    USD:'',
+const initialInput = {
+  income: {
+    VND: '0',
+    USD:'0',
     exchangeRate:'23300'
   },
-  insuranceValues:{
+  insurance:{
     fullWage: true,
     otherValue: 0,
     minimumWage: '14900000',
@@ -46,48 +47,112 @@ const initialValue = {
     unEmployedPercent: '1',
     region: initialRegion[0]
   },
-  reductionValues:{
+  reduction:{
     reductionPersonal: '11000000',
     reductionDependant: '4400000',
     numberOfDependent: '0',
   }
 }
 
+const initialResult = {
+    socialInsurance: 0,
+    healthInsurance: 0,
+    unEmployedInsurance: 0,
+    incomeBeforeTax: 0,
+    taxableIncome: 0,
+    personalIncomeTax: 0,
+    netSalary: 0,
+    reductionPersonal: '11000000',
+    reductionDependant: '0',
+    numberOfDependent: '0',
+}
+
+
 function App() {
 
-  const[values, setValues] = useState(initialValue);
-  console.log(values);
+  const[values, setValues] = useState(initialInput)
 
-  const calculateGrossToNet = () =>{
+  const[detailData, setDetailData] = useState(initialResult)
 
-  }
-
-  const changeIncomeHandler = (incomeData) => {
+  const handleChangeData = (field,data) =>{
     setValues((previous) =>{
       return{
         ...previous,
-        incomeValues:  incomeData,
+        [field]: data,
       }
     });
   }
 
-  const changeInsuranceHandler = (insuranceData) => {
-    setValues((previous) =>{
-      return{
-        ...previous,
-        insuranceValues:  insuranceData,
+  const calculateFieldInsurance = (typeOfInsurance, insurance) =>{
+    const insurancePercent = +insurance[typeOfInsurance]
+    const isFullWage = insurance['fullWage']
+    if(isFullWage){
+      const grossSalaryVnd = totalGrossSalary()
+      return (grossSalaryVnd * insurancePercent / 100)
+    }
+    const others = +insurance['otherValue']
+    return (others * insurancePercent / 100)
+  }
+
+  const totalGrossSalary = () =>{
+    return +values.income.VND + (+values.income.USD * (+values.income.exchangeRate))
+  }
+
+  const totalReductionFamily = () =>{
+    return +values.reduction.reductionPersonal + (values.reduction.reductionDependant * values.reduction.numberOfDependent)
+  }
+
+  const socialInsurance = calculateFieldInsurance('socialPercent', values.insurance)
+  const healthInsurance = calculateFieldInsurance('healthPercent',values.insurance)
+  const unEmployedInsurance = calculateFieldInsurance('unEmployedPercent',values.insurance)
+  const incomeBeforeTax = totalGrossSalary() - socialInsurance - healthInsurance - unEmployedInsurance
+
+
+  const calculateGrossToNet = (incomeBeforeTax) =>{
+    const netSalary = incomeBeforeTax
+    const taxableIncome = incomeBeforeTax - totalReductionFamily();
+  }
+
+  const calculatePersonalIncomeTax = (taxableIncome) =>{
+    let currentTaxableIncome = taxableIncome
+    if(currentTaxableIncome <= 0){
+      return 0;
+    }else{
+      // > 5 cu : 5%
+      // 5 cu -> 10 cu: 10%
+      // 10 cu -> 18 cu: 15%
+      // 18 cu -> 32 cu: 20%
+      // 32 cu -> 52 cu: 25%
+      // 52 cu -> 80 cu: 30%
+      // tren 80 cu: 35%
+      const personalIncomeTax = 0;
+      currentTaxableIncome = currentTaxableIncome - 5000000
+      if(taxableIncome - 5000000 <= 0){
+        personalIncomeTax = currentTaxableIncome * 0.05
+      } else{
+        currentTaxableIncome = currentTaxableIncome - 10000000
+        personalIncomeTax = personalIncomeTax + 0.05 * 5000000
+        if(taxableIncome - 10000000 <= 0){
+          personalIncomeTax = personalIncomeTax + currentTaxableIncome * 0.1;
+        }else{
+          personalIncomeTax = personalIncomeTax + 0.1 * 10000000
+          currentTaxableIncome = currentTaxableIncome - 18000000
+          if()
+        }
       }
-    });
+      return personalIncomeTax;
+    }
   }
 
   return (
     <div className="App">
       <Header/>
       <Card>
-        <Income income={values.incomeValues} updateIncome={changeIncomeHandler} />
-        <Insurance insurance={values.insuranceValues} updateInsurance={changeInsuranceHandler}/>
-        <Reduction reduction={values.reductionValues}/>
+        <Income income={values.income} updateIncome={handleChangeData} />
+        <Insurance insurance={values.insurance} updateInsurance={handleChangeData}/>
+        <Reduction reduction={values.reduction} updateReduction={handleChangeData}/>
         <Button onClick={calculateGrossToNet}>GROSS → NET</Button>
+        <ShowResult/>
       </Card>
     </div>
   );

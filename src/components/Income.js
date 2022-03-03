@@ -1,11 +1,10 @@
-import {React, useState} from 'react';
 import classes from './Income.module.css';
 
 const Income = ({income, updateIncome}) =>{
 
     const changeInputHandler = (event) =>{
         const name = event.target.name
-        updateIncome({
+        updateIncome('income',{
             ...income,
             [name]: event.target.value,
         })
