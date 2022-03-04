@@ -108,15 +108,11 @@ function App() {
   const incomeBeforeTax = totalGrossSalary() - socialInsurance - healthInsurance - unEmployedInsurance
 
 
-  const calculateGrossToNet = (incomeBeforeTax) =>{
-    const netSalary = incomeBeforeTax
-    const taxableIncome = incomeBeforeTax - totalReductionFamily();
-  }
-
   const calculatePersonalIncomeTax = (taxableIncome) =>{
+    let personalIncomeTax = 0;
     let currentTaxableIncome = taxableIncome
     if(currentTaxableIncome <= 0){
-      return 0;
+      return personalIncomeTax;
     }else{
       // > 5 cu : 5%
       // 5 cu -> 10 cu: 10%
@@ -125,24 +121,43 @@ function App() {
       // 32 cu -> 52 cu: 25%
       // 52 cu -> 80 cu: 30%
       // tren 80 cu: 35%
-      const personalIncomeTax = 0;
-      currentTaxableIncome = currentTaxableIncome - 5000000
-      if(taxableIncome - 5000000 <= 0){
-        personalIncomeTax = currentTaxableIncome * 0.05
-      } else{
-        currentTaxableIncome = currentTaxableIncome - 10000000
-        personalIncomeTax = personalIncomeTax + 0.05 * 5000000
-        if(taxableIncome - 10000000 <= 0){
-          personalIncomeTax = personalIncomeTax + currentTaxableIncome * 0.1;
-        }else{
-          personalIncomeTax = personalIncomeTax + 0.1 * 10000000
-          currentTaxableIncome = currentTaxableIncome - 18000000
-          if()
+      
+      if(taxableIncome <= 5000000){
+        personalIncomeTax = 0.05 * currentTaxableIncome;
+        return personalIncomeTax;
+      }else{
+        if(taxableIncome > 5000000 && taxableIncome <= 10000000){
+          personalIncomeTax = 250000 + 0.1 * (currentTaxableIncome-5000000);
+        }
+        if(taxableIncome > 10000000 && taxableIncome <= 18000000){
+          personalIncomeTax = 750000 + 0.15 * (currentTaxableIncome-10000000);
+        }
+        if(taxableIncome > 18000000 && taxableIncome <= 32000000){
+          personalIncomeTax = 1950000 + 0.2 * (currentTaxableIncome-18000000);
+        }
+        if(taxableIncome > 32000000 && taxableIncome <= 52000000){
+          personalIncomeTax = 4750000 + 0.25 * (currentTaxableIncome-32000000);
+        }
+        if(taxableIncome > 52000000 && taxableIncome <= 80000000){
+          personalIncomeTax = 9750000 + 0.3 * (currentTaxableIncome-52000000);
+        }
+        if(taxableIncome > 80000000){
+          personalIncomeTax = 18150000 + 0.35 * (currentTaxableIncome-80000000);
         }
       }
       return personalIncomeTax;
     }
   }
+
+
+  const calculateGrossToNet = () =>{
+    console.log(incomeBeforeTax);
+    const taxableIncome = incomeBeforeTax - totalReductionFamily();
+    console.log(taxableIncome);
+    console.log(calculatePersonalIncomeTax(taxableIncome));
+    return taxableIncome - calculatePersonalIncomeTax(taxableIncome);
+  }
+
 
   return (
     <div className="App">
