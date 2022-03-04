@@ -72,7 +72,7 @@ const Insurance = ({insurance, updateInsurance}) =>{
                 <div style={{marginTop:'10px'}}>
                     <span>
                         <label>Minimum wage </label>
-                        <input style={{width:'70px'}} name="minimumWage" type='text' value={insurance.region.minimumSalaryByRegion} readOnly></input>
+                        <input style={{width:'70px'}} name="minimumWage" type='text' value={insurance.minimumWage} onChange={changeInputHandler}></input>
                         <label> VND</label>
                     </span>
                     <span>

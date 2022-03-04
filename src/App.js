@@ -9,26 +9,30 @@ import Button from './UI/Button'
 import ShowResult from './components/ShowResult'
 import './App.css'
 
-const initialRegion = [
+const region = [
   {
       id: 1,
       titleRegion: 'I',
       minimumSalaryByRegion: 4420000,
+      maximumUnemployedInsurance: 884000,
   },
   {
       id: 2,
       titleRegion: 'II',
       minimumSalaryByRegion: 3920000,
+      maximumUnemployedInsurance: 784000,
   },
   {
       id: 3,
       titleRegion: 'III',
       minimumSalaryByRegion: 3430000,
+      maximumUnemployedInsurance: 686000,
   },
   {
       id: 4,
       titleRegion: 'IV',
       minimumSalaryByRegion: 3070000,
+      maximumUnemployedInsurance: 614000,
   }
 ]
 
@@ -41,11 +45,11 @@ const initialInput = {
   insurance:{
     fullWage: true,
     otherValue: 0,
-    minimumWage: '14900000',
+    minimumWage: '1490000',
     socialPercent: '8',
     healthPercent: '1.5',
     unEmployedPercent: '1',
-    region: initialRegion[0]
+    region: region[0]
   },
   reduction:{
     reductionPersonal: '11000000',
@@ -55,6 +59,7 @@ const initialInput = {
 }
 
 const initialResult = {
+    grossSalary: 0,
     socialInsurance: 0,
     healthInsurance: 0,
     unEmployedInsurance: 0,
@@ -62,18 +67,29 @@ const initialResult = {
     taxableIncome: 0,
     personalIncomeTax: 0,
     netSalary: 0,
-    reductionPersonal: '11000000',
-    reductionDependant: '0',
-    numberOfDependent: '0',
+    grossSalaryUsd: 0,
+    netSalaryUsd: 0,
 }
 
+const detailIncomeTax = {
+  fivePercent: '0',
+  tenPercent: '0',
+  fifteenPercent: '0',
+  TwentyPercent: '0',
+  TwentyFivePercent: '0',
+  ThirtyPercent: '0',
+  ThirtyFivePercent: '0'
+}
+
+const maximumInsurance = {
+  factor: 20,
+  minimumWageBasic: 1490000,
+}
 
 function App() {
-
   const[values, setValues] = useState(initialInput)
-
   const[detailData, setDetailData] = useState(initialResult)
-
+  // handle update change data from component to App
   const handleChangeData = (field,data) =>{
     setValues((previous) =>{
       return{
@@ -81,83 +97,92 @@ function App() {
         [field]: data,
       }
     });
-  }
-
-  const calculateFieldInsurance = (typeOfInsurance, insurance) =>{
-    const insurancePercent = +insurance[typeOfInsurance]
-    const isFullWage = insurance['fullWage']
-    if(isFullWage){
-      const grossSalaryVnd = totalGrossSalary()
-      return (grossSalaryVnd * insurancePercent / 100)
-    }
-    const others = +insurance['otherValue']
-    return (others * insurancePercent / 100)
-  }
-
-  const totalGrossSalary = () =>{
+  }  
+  // calculate total gross salary vnd
+  const totalGrossSalaryVnd = () =>{
     return +values.income.VND + (+values.income.USD * (+values.income.exchangeRate))
   }
-
+  // calculate total reduction family
   const totalReductionFamily = () =>{
     return +values.reduction.reductionPersonal + (values.reduction.reductionDependant * values.reduction.numberOfDependent)
   }
-
-  const socialInsurance = calculateFieldInsurance('socialPercent', values.insurance)
-  const healthInsurance = calculateFieldInsurance('healthPercent',values.insurance)
-  const unEmployedInsurance = calculateFieldInsurance('unEmployedPercent',values.insurance)
-  const incomeBeforeTax = totalGrossSalary() - socialInsurance - healthInsurance - unEmployedInsurance
-
+  const calculateInsurance = (field, insurance) =>{
+    let grossSalaryVnd = totalGrossSalaryVnd()
+    if(!insurance.fullWage){
+      grossSalaryVnd = insurance.otherValue
+    }
+    const insuranceValue = grossSalaryVnd * (+insurance[field]) / 100
+    const maximumInsuranceValue = maximumInsurance.factor * maximumInsurance.minimumWageBasic;
+    if(field === 'unEmployedPercent'){
+      if(insuranceValue > insurance.region.maximumUnemployedInsurance){
+        return values.insurance.region.maximumUnemployedInsurance
+      }
+    }
+    if(grossSalaryVnd >= maximumInsuranceValue){
+      return +insurance.minimumWage * 20 * (+insurance[field]) / 100
+    }    
+    return insuranceValue
+  }
 
   const calculatePersonalIncomeTax = (taxableIncome) =>{
     let personalIncomeTax = 0;
     let currentTaxableIncome = taxableIncome
     if(currentTaxableIncome <= 0){
       return personalIncomeTax;
-    }else{
-      // > 5 cu : 5%
-      // 5 cu -> 10 cu: 10%
-      // 10 cu -> 18 cu: 15%
-      // 18 cu -> 32 cu: 20%
-      // 32 cu -> 52 cu: 25%
-      // 52 cu -> 80 cu: 30%
-      // tren 80 cu: 35%
-      
+    }else{     
       if(taxableIncome <= 5000000){
         personalIncomeTax = 0.05 * currentTaxableIncome;
         return personalIncomeTax;
       }else{
         if(taxableIncome > 5000000 && taxableIncome <= 10000000){
-          personalIncomeTax = 250000 + 0.1 * (currentTaxableIncome-5000000);
+          personalIncomeTax = 250000 + 0.1 * (currentTaxableIncome - 5000000);
         }
         if(taxableIncome > 10000000 && taxableIncome <= 18000000){
-          personalIncomeTax = 750000 + 0.15 * (currentTaxableIncome-10000000);
+          personalIncomeTax = 750000 + 0.15 * (currentTaxableIncome - 10000000);
         }
         if(taxableIncome > 18000000 && taxableIncome <= 32000000){
-          personalIncomeTax = 1950000 + 0.2 * (currentTaxableIncome-18000000);
+          personalIncomeTax = 1950000 + 0.2 * (currentTaxableIncome - 18000000);
         }
         if(taxableIncome > 32000000 && taxableIncome <= 52000000){
-          personalIncomeTax = 4750000 + 0.25 * (currentTaxableIncome-32000000);
+          personalIncomeTax = 4750000 + 0.25 * (currentTaxableIncome - 32000000);
         }
         if(taxableIncome > 52000000 && taxableIncome <= 80000000){
-          personalIncomeTax = 9750000 + 0.3 * (currentTaxableIncome-52000000);
+          personalIncomeTax = 9750000 + 0.3 * (currentTaxableIncome - 52000000);
         }
         if(taxableIncome > 80000000){
-          personalIncomeTax = 18150000 + 0.35 * (currentTaxableIncome-80000000);
+          personalIncomeTax = 18150000 + 0.35 * (currentTaxableIncome - 80000000);
         }
       }
       return personalIncomeTax;
     }
   }
 
-
   const calculateGrossToNet = () =>{
-    console.log(incomeBeforeTax);
-    const taxableIncome = incomeBeforeTax - totalReductionFamily();
-    console.log(taxableIncome);
-    console.log(calculatePersonalIncomeTax(taxableIncome));
-    return taxableIncome - calculatePersonalIncomeTax(taxableIncome);
+    const socialInsurance = calculateInsurance('socialPercent', values.insurance)
+    const healthInsurance = calculateInsurance('healthPercent', values.insurance)
+    const unEmployedInsurance = calculateInsurance('unEmployedPercent', values.insurance)
+    const incomeBeforeTax = totalGrossSalaryVnd() - socialInsurance - healthInsurance - unEmployedInsurance
+    const taxableIncome = incomeBeforeTax - totalReductionFamily()
+    const personalIncomeTax = calculatePersonalIncomeTax(taxableIncome);
+    const netSalary = incomeBeforeTax - personalIncomeTax
+    const grossSalaryUsd = values.income.VND / values.income.exchangeRate
+    const netSalaryUsd = netSalary / values.income.exchangeRate;
+    setDetailData((previous) =>{
+      return{
+        ...previous,
+        grossSalary: (+values.income.VND).toLocaleString('en-US',{ maximumFractionDigits: 2 }),
+        socialInsurance: socialInsurance,
+        healthInsurance: healthInsurance,
+        unEmployedInsurance: unEmployedInsurance,
+        incomeBeforeTax: incomeBeforeTax,
+        taxableIncome: taxableIncome,
+        personalIncomeTax: personalIncomeTax,
+        netSalary: netSalary.toLocaleString('en-US',{ maximumFractionDigits: 2 }),
+        grossSalaryUsd: grossSalaryUsd.toLocaleString('en-US',{ maximumFractionDigits: 2 }),
+        netSalaryUsd: netSalaryUsd.toLocaleString('en-US',{ maximumFractionDigits: 2 }),
+      }
+    })
   }
-
 
   return (
     <div className="App">
@@ -167,7 +192,7 @@ function App() {
         <Insurance insurance={values.insurance} updateInsurance={handleChangeData}/>
         <Reduction reduction={values.reduction} updateReduction={handleChangeData}/>
         <Button onClick={calculateGrossToNet}>GROSS → NET</Button>
-        <ShowResult/>
+        <ShowResult gross={detailData.grossSalary} grossUsd ={detailData.grossSalaryUsd} net={detailData.netSalary} netUsd={detailData.netSalaryUsd}/>
       </Card>
     </div>
   );
