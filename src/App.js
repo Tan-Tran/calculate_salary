@@ -8,6 +8,7 @@ import Card from './UI/Card'
 import Button from './UI/Button'
 import ShowResult from './components/ShowResult'
 import './App.css'
+import InformationInput from './components/InformationInput'
 
 const region = [
   {
@@ -184,13 +185,28 @@ function App() {
     })
   }
 
+  const onChangeInfoHandler = (field, data) =>{
+    setValues((previous) =>{
+      return{
+        ...previous,
+        [field]: data,
+      }
+    });
+  }
+
   return (
     <div className="App">
       <Header/>
       <Card>
-        <Income income={values.income} updateIncome={handleChangeData} />
+        <InformationInput 
+          income={values.income} 
+          insurance={values.insurance} 
+          reduction={values.reduction} 
+          updateData={onChangeInfoHandler}
+        />
+        {/* <Income income={values.income} updateIncome={handleChangeData} />
         <Insurance insurance={values.insurance} updateInsurance={handleChangeData}/>
-        <Reduction reduction={values.reduction} updateReduction={handleChangeData}/>
+        <Reduction reduction={values.reduction} updateReduction={handleChangeData}/> */}
         <Button onClick={calculateGrossToNet}>GROSS → NET</Button>
         <ShowResult gross={detailData.grossSalary} grossUsd ={detailData.grossSalaryUsd} net={detailData.netSalary} netUsd={detailData.netSalaryUsd}/>
       </Card>
