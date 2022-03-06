@@ -1,9 +1,6 @@
 import { useState } from 'react'
 
 import Header from './components/Header'
-import Income from './components/Income'
-import Insurance from './components/Insurance'
-import Reduction from './components/Reduction'
 import Card from './UI/Card'
 import Button from './UI/Button'
 import ShowResult from './components/ShowResult'
@@ -90,36 +87,28 @@ const maximumInsurance = {
 function App() {
   const[values, setValues] = useState(initialInput)
   const[detailData, setDetailData] = useState(initialResult)
-  // handle update change data from component to App
-  const handleChangeData = (field,data) =>{
-    setValues((previous) =>{
-      return{
-        ...previous,
-        [field]: data,
-      }
-    });
-  }  
-  // calculate total gross salary vnd
+
+  console.log(values)
+
   const totalGrossSalaryVnd = () =>{
     return +values.income.VND + (+values.income.USD * (+values.income.exchangeRate))
   }
-  // calculate total reduction family
+
   const totalReductionFamily = () =>{
-    return +values.reduction.reductionPersonal + (values.reduction.reductionDependant * values.reduction.numberOfDependent)
+    
+    return (+values.reduction.reductionPersonal) + (+values.reduction.reductionDependant) * values.reduction.numberOfDependent
   }
+
   const calculateInsurance = (field, insurance) =>{
-    let grossSalaryVnd = totalGrossSalaryVnd()
-    if(!insurance.fullWage){
-      grossSalaryVnd = insurance.otherValue
-    }
-    const insuranceValue = grossSalaryVnd * (+insurance[field]) / 100
+    const value = insurance.fullWage? totalGrossSalaryVnd(): insurance.otherValue
+    const insuranceValue = value * (+insurance[field]) / 100
     const maximumInsuranceValue = maximumInsurance.factor * maximumInsurance.minimumWageBasic;
     if(field === 'unEmployedPercent'){
       if(insuranceValue > insurance.region.maximumUnemployedInsurance){
         return values.insurance.region.maximumUnemployedInsurance
       }
     }
-    if(grossSalaryVnd >= maximumInsuranceValue){
+    if(value >= maximumInsuranceValue){
       return +insurance.minimumWage * 20 * (+insurance[field]) / 100
     }    
     return insuranceValue
@@ -159,11 +148,12 @@ function App() {
   }
 
   const calculateGrossToNet = () =>{
+    console.log(totalReductionFamily())
     const socialInsurance = calculateInsurance('socialPercent', values.insurance)
     const healthInsurance = calculateInsurance('healthPercent', values.insurance)
-    const unEmployedInsurance = calculateInsurance('unEmployedPercent', values.insurance)
+    const unEmployedInsurance = calculateInsurance('unEmployedPercent', values.insurance)      
     const incomeBeforeTax = totalGrossSalaryVnd() - socialInsurance - healthInsurance - unEmployedInsurance
-    const taxableIncome = incomeBeforeTax - totalReductionFamily()
+    const taxableIncome = ((incomeBeforeTax - totalReductionFamily()) < 0)? 0: incomeBeforeTax - totalReductionFamily()
     const personalIncomeTax = calculatePersonalIncomeTax(taxableIncome);
     const netSalary = incomeBeforeTax - personalIncomeTax
     const grossSalaryUsd = values.income.VND / values.income.exchangeRate
@@ -172,15 +162,18 @@ function App() {
       return{
         ...previous,
         grossSalary: (+values.income.VND).toLocaleString('en-US',{ maximumFractionDigits: 2 }),
-        socialInsurance: socialInsurance,
-        healthInsurance: healthInsurance,
-        unEmployedInsurance: unEmployedInsurance,
-        incomeBeforeTax: incomeBeforeTax,
-        taxableIncome: taxableIncome,
-        personalIncomeTax: personalIncomeTax,
+        socialInsurance: socialInsurance.toLocaleString('en-US',{ maximumFractionDigits: 2 }),
+        healthInsurance: healthInsurance.toLocaleString('en-US',{ maximumFractionDigits: 2 }),
+        unEmployedInsurance: unEmployedInsurance.toLocaleString('en-US',{ maximumFractionDigits: 2 }),
+        incomeBeforeTax: incomeBeforeTax.toLocaleString('en-US',{ maximumFractionDigits: 2 }),
+        taxableIncome: taxableIncome.toLocaleString('en-US',{ maximumFractionDigits: 2 }),
+        personalIncomeTax: personalIncomeTax.toLocaleString('en-US',{ maximumFractionDigits: 2 }),
         netSalary: netSalary.toLocaleString('en-US',{ maximumFractionDigits: 2 }),
         grossSalaryUsd: grossSalaryUsd.toLocaleString('en-US',{ maximumFractionDigits: 2 }),
         netSalaryUsd: netSalaryUsd.toLocaleString('en-US',{ maximumFractionDigits: 2 }),
+        socialPercent: values.insurance.socialPercent,
+        healthPercent: values.insurance.healthPercent,
+        unEmployedPercent: values.insurance.unEmployedPercent,
       }
     })
   }
@@ -204,11 +197,8 @@ function App() {
           reduction={values.reduction} 
           updateData={onChangeInfoHandler}
         />
-        {/* <Income income={values.income} updateIncome={handleChangeData} />
-        <Insurance insurance={values.insurance} updateInsurance={handleChangeData}/>
-        <Reduction reduction={values.reduction} updateReduction={handleChangeData}/> */}
         <Button onClick={calculateGrossToNet}>GROSS → NET</Button>
-        <ShowResult gross={detailData.grossSalary} grossUsd ={detailData.grossSalaryUsd} net={detailData.netSalary} netUsd={detailData.netSalaryUsd}/>
+        <ShowResult detailData={detailData} insurance={values.insurance} reduction={values.reduction}/>
       </Card>
     </div>
   );

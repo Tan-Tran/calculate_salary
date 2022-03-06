@@ -1,7 +1,14 @@
-.result{
-    margin: 10px 0px 0px 10px;
-    color: #FF0000;
-    font-size: 12px;
-    width: 450px;
-    text-align: right;
+.result {
+  margin: 10px 0px 0px 10px;
+  color: #ff0000;
+  font-size: 12px;
+  width: 450px;
+  text-align: right;
+}
+
+.title {
+  font-weight: bold;
+  color: #3b5998;
+  margin-bottom: 5px;
+  text-align: left;
 }
