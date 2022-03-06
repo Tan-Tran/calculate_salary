@@ -2,7 +2,6 @@ import { useState } from 'react'
 
 import Header from './components/Header'
 import Card from './UI/Card'
-import Button from './UI/Button'
 import ShowResult from './components/ShowResult'
 import './App.css'
 import InformationInput from './components/InformationInput'
@@ -196,8 +195,8 @@ function App() {
           insurance={values.insurance} 
           reduction={values.reduction} 
           updateData={onChangeInfoHandler}
+          calculateGrossToNet= {calculateGrossToNet}
         />
-        <Button onClick={calculateGrossToNet}>GROSS → NET</Button>
         <ShowResult detailData={detailData} insurance={values.insurance} reduction={values.reduction}/>
       </Card>
     </div>
