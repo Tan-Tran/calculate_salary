@@ -1,20 +1,23 @@
-import { Fragment } from 'react'
 import Income from './Income'
 import Insurance from './Insurance'
 import Reduction from './Reduction'
 import Button from '../UI/Button'
+import classes from './InformationInput.module.css'
 
 const InformationInput = ({income, insurance, reduction, updateData, calculateGrossToNet}) =>{
     const changeInputHandler = (field, data) =>{
         updateData(field, data)
     }
     return(
-        <Fragment>
+        <div className={classes.container}>
             <Income income={income} updateIncome={changeInputHandler}/>
             <Insurance insurance={insurance} updateInsurance={changeInputHandler}/>
             <Reduction reduction={reduction} updateReduction={changeInputHandler}/>
-            <Button onClick={calculateGrossToNet}>GROSS → NET</Button>
-        </Fragment>
+            <div style={{marginLeft:'110px'}} className={classes.title} >
+                <Button onClick={calculateGrossToNet}>GROSS → NET</Button>
+                <Button>NET → GROSS</Button>
+            </div>           
+        </div>
     )
 }
 

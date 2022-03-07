@@ -14,17 +14,35 @@ const Reduction = ({reduction, updateReduction}) =>{
             <div className={classes.content}>
                 <span>
                     <label>Personal: </label>
-                    <input style= {{width: '70px'}} name="reductionPersonal" type='text' value={reduction.reductionPersonal} onChange={changeInputHandler}></input>
+                    <input 
+                        style= {{width: '70px'}} 
+                        name="reductionPersonal" 
+                        type='text' 
+                        value={reduction.reductionPersonal} 
+                        onChange={changeInputHandler}
+                    />
                     <label> VND</label>
                 </span>
                 <span>
                     <label>Dependant </label>
-                    <input style= {{width: '70px'}} name="reductionDependant" type='text' value={reduction.reductionDependant} onChange={changeInputHandler}></input>
+                    <input 
+                        style= {{width: '70px'}} 
+                        name="reductionDependant" 
+                        type='text' 
+                        value={reduction.reductionDependant} 
+                        onChange={changeInputHandler}
+                    />
                     <label> VND</label>
                 </span>
                 <span>
                     <label>Number of dependant: </label>
-                    <input style= {{width: '40px'}} name="numberOfDependent" type='text' value={reduction.numberOfDependent} onChange={changeInputHandler}></input>
+                    <input 
+                        style= {{width: '40px'}} 
+                        name="numberOfDependent" 
+                        type='text' 
+                        value={reduction.numberOfDependent} 
+                        onChange={changeInputHandler}
+                    />
                 </span>
             </div>
         </div>

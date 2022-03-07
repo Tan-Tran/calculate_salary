@@ -1,31 +1,5 @@
 import classes from './Insurance.module.css'
-
-const initialRegion = [
-    {
-        id: 1,
-        titleRegion: 'I',
-        minimumSalaryByRegion: 4420000,
-        maximumUnemployedInsurance: 884000,
-    },
-    {
-        id: 2,
-        titleRegion: 'II',
-        minimumSalaryByRegion: 3920000,
-        maximumUnemployedInsurance: 784000,
-    },
-    {
-        id: 3,
-        titleRegion: 'III',
-        minimumSalaryByRegion: 3430000,
-        maximumUnemployedInsurance: 686000,
-    },
-    {
-        id: 4,
-        titleRegion: 'IV',
-        minimumSalaryByRegion: 3070000,
-        maximumUnemployedInsurance: 614000,
-    }
-  ]
+import region from '../data/Region'
 
 const Insurance = ({insurance, updateInsurance}) =>{
         
@@ -43,7 +17,7 @@ const Insurance = ({insurance, updateInsurance}) =>{
         if(name === 'region'){
             updateInsurance('insurance',{
                 ...insurance,
-                [name]: initialRegion[event.target.value]
+                [name]: region[event.target.value]
             })
             return;
         }
@@ -62,45 +36,90 @@ const Insurance = ({insurance, updateInsurance}) =>{
                     <span>Pay for</span>
                     <span>
                         <label>Full wage </label>
-                        <input type='radio' name="fullWage" checked={insurance.fullWage} onChange={changeInputHandler}/>
+                        <input 
+                            type='radio' 
+                            name="fullWage" 
+                            checked={insurance.fullWage} 
+                            onChange={changeInputHandler}
+                        />
                     </span>
                     <span>
                         <label>other </label>
-                        <input type='radio' name ="fullWage" checked={!insurance.fullWage} onChange={changeInputHandler}/>
+                        <input 
+                            type='radio' 
+                            name ="fullWage" 
+                            checked={!insurance.fullWage} 
+                            onChange={changeInputHandler}
+                        />
                     </span>
                     <span>
-                        <input style={{width: '70px'}} name="otherValue" disabled={insurance.fullWage} onChange={changeInputHandler}/>
+                        <input 
+                            style={{width: '70px'}} 
+                            name="other" 
+                            disabled={insurance.fullWage} 
+                            onChange={changeInputHandler}
+                        />
                         <label> VND</label>
                     </span>
                 </div>
                 <div style={{marginTop:'10px'}}>
                     <span>
                         <label>Minimum wage </label>
-                        <input style={{width:'70px'}} name="minimumWage" type='text' value={insurance.minimumWage} onChange={changeInputHandler}></input>
+                        <input 
+                            style={{width:'70px'}} 
+                            name="minimumWage" 
+                            type='text' 
+                            value={insurance.minimumWage} 
+                            onChange={changeInputHandler}
+                        />
                         <label> VND</label>
                     </span>
                     <span>
                         <label>Social </label>
-                        <input style={{width:'30px'}} name="socialPercent" type='text' value={insurance.socialPercent} onChange={changeInputHandler}></input>
+                        <input 
+                            style={{width:'30px'}} 
+                            name="socialPercent" 
+                            type='text' 
+                            value={insurance.socialPercent} 
+                            onChange={changeInputHandler}
+                        />
                         <label> %</label>
                     </span>
                     <span>
                         <label>Health </label>
-                        <input style={{width:'30px'}} name="healthPercent" type='text' value={insurance.healthPercent} onChange={changeInputHandler}></input>
+                        <input 
+                            style={{width:'30px'}} 
+                            name="healthPercent" 
+                            type='text' 
+                            value={insurance.healthPercent} 
+                            onChange={changeInputHandler}
+                        />
                         <label> %</label>
                     </span>
                     <span>
                         <label>Unemployed </label>
-                        <input style={{width:'30px'}} name="unEmployedPercent" type='text' value={insurance.unEmployedPercent} onChange={changeInputHandler}></input>
+                        <input 
+                            style={{width:'30px'}} 
+                            name="unEmployedPercent" 
+                            type='text' 
+                            value={insurance.unEmployedPercent} 
+                            onChange={changeInputHandler}
+                        />
                         <label> %</label>
                     </span>
                 </div>
                 <div style={{marginTop:'10px'}}>
                     <span><label>Region</label></span>
-                    {initialRegion.map((item) =>{
+                    {region.map((item) =>{
                         return (
                             <span key={item.id}>
-                                <input type="radio" name="region" checked={insurance.region.id === item.id} value={item.id-1} onChange={changeInputHandler}></input>
+                                <input 
+                                    type="radio" 
+                                    name="region" 
+                                    checked={insurance.region.id === item.id} 
+                                    value={item.id-1} 
+                                    onChange={changeInputHandler}
+                                />
                                 <label> {item.titleRegion}</label>
                             </span>
                         )
