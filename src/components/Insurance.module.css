@@ -15,3 +15,8 @@
     color: #3B5998;
     margin-bottom: 5px;
 }
+
+img{
+    width: 16px;
+    cursor: pointer;
+}

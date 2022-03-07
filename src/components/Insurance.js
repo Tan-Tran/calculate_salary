@@ -1,8 +1,16 @@
+import { useState } from 'react'
 import classes from './Insurance.module.css'
 import region from '../data/Region'
+import info from '../image/get_info.png'
+import InfoModal from '../UI/InfoModal'
 
 const Insurance = ({insurance, updateInsurance}) =>{
-        
+    const[isShowInfoModal, setIsShowInfoModal] = useState(false)
+
+    const showInfoModalHandler = () =>{
+        setIsShowInfoModal(!isShowInfoModal);
+    }
+
     const changeInputHandler = (event) => {
         const name = event.target.name;
 
@@ -30,6 +38,7 @@ const Insurance = ({insurance, updateInsurance}) =>{
 
     return(
         <div className={classes.insurance}>
+            <InfoModal isShow={isShowInfoModal} showInfoModalHandler={showInfoModalHandler}/>
             <h4 className={classes.title}>Insurance</h4>
             <div className={classes.content}>                
                 <div>
@@ -109,7 +118,10 @@ const Insurance = ({insurance, updateInsurance}) =>{
                     </span>
                 </div>
                 <div style={{marginTop:'10px'}}>
-                    <span><label>Region</label></span>
+                    <span>
+                        <label>Region: </label>
+                        <a><img src={info} onClick={showInfoModalHandler}/></a>
+                    </span>
                     {region.map((item) =>{
                         return (
                             <span key={item.id}>

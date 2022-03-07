@@ -1,0 +1,57 @@
+
+.overlay{
+    background: #6e4f1c url("../image/background_modal.png") 50% 50% repeat;
+    opacity: .6;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+    font-size: 14.3px;
+}
+
+.content{
+    position: absolute;
+    height: auto;
+    width: 650px;
+    top: 50px;
+    left: 430.5px;
+    border: 1px solid #d9d6c4;
+    background: #eceadf url("../image/background_content_modal.png") 50% 50% repeat;
+    color: #1f1f1f;
+    padding: 0.2em;
+    border-radius: 6px;
+    z-index: 100;
+    font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+    font-size: 14.3px;
+}
+
+.header{
+    padding: 0.4em 1em;
+    position: relative;
+    border-radius: 6px;
+    border: 1px solid #d4d1bf;
+    background: #fff url("../image/background_header_content.png") 50% 50% repeat;
+    color: #453821;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+}
+
+.body{
+    width: auto;
+    min-height: 0px;
+    max-height: none;
+    padding: 0.5em 1em;
+}
+
+.btn{
+    cursor: pointer;
+}
+
+
+
