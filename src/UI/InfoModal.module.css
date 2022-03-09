@@ -16,8 +16,9 @@
     position: absolute;
     height: auto;
     width: 650px;
-    top: 50px;
-    left: 430.5px;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
     border: 1px solid #d9d6c4;
     background: #eceadf url("../image/background_content_modal.png") 50% 50% repeat;
     color: #1f1f1f;

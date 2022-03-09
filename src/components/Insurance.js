@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import classes from './Insurance.module.css'
-import region from '../data/Region'
+import {region} from '../data/data'
 import info from '../image/get_info.png'
 import InfoModal from '../UI/InfoModal'
 
