@@ -66,7 +66,7 @@ export const initialResult = {
       grossSalaryUsd: 0,
       netSalaryUsd: 0,
       reductionPersonal: initialInputData.reduction.reductionPersonal,
-      reductionDependant: initialInputData.reduction.reductionDependant,
+      reductionDependant: initialInputData.reduction.reductionDependant * initialInputData.reduction.numberOfDependent,
     },
     personIncomeTaxDetail:{
       fivePercent: 0,

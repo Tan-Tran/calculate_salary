@@ -11,9 +11,11 @@ import {totalGrossSalaryVnd} from './functions/totalGrossSalaryVnd'
 import {calculateNetSalary} from './functions/calculateNetSalary'
 import {binarySearchGrossFromNet} from './functions/binarySearchGrossFromNet'
 
+// solution 2
+import {calculateNetToGrossByFormula} from './functions/solution2/calculateNetToGrossByFormula'
+
 function App() {
   const[values, setValues] = useState(initialInputData)
-
   const updateDataHandler = (field, data) =>{
     setValues((previous) =>{
       return{
@@ -22,6 +24,8 @@ function App() {
       }
     });
   }
+
+  console.log(calculateNetToGrossByFormula({income: values.income, insurance: values.insurance, reduction: values.reduction}))
 
   const[detailData, setDetailData] = useState(initialResult)
 
