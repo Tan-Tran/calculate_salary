@@ -7,7 +7,7 @@ export const calculateInsurance = (typeOfInsurance, insurance, income) =>{
     const minimumWage = +insurance.minimumWage
     const minimumSalaryByRegion = +insurance.region.minimumSalaryByRegion
     const maximumUnemployedInsurance = +insurance.region.maximumUnemployedInsurance
-    const maximumInsurance = defaultInsurance.factor * defaultInsurance.minimumWageBasic
+    const maximumInsurance = defaultInsurance.factor * insurance.minimumWage
     if(typeOfInsurance === 'unEmployedPercent'){
       if(valueToCalculateInsurance > minimumSalaryByRegion * 20){
         return maximumUnemployedInsurance * percent
