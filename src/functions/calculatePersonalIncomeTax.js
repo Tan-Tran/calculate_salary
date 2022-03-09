@@ -105,7 +105,7 @@ export const calculatePersonalIncomeTax = (taxableIncome) =>{
             fifteenPercent: 1200000,
             twentyPercent: 2800000,
             twentyFivePercent: 5000000,
-            thirtyPercent: 84000000,
+            thirtyPercent: 8400000,
             thirtyFivePercent: Math.floor(thirtyFivePercent),
             totalPersonIncomeTax: personalIncomeTax
           }

@@ -1,10 +1,9 @@
-import { defaultInsurancePercentEmployerPay } from "../data/data";
-import {totalGrossSalaryVnd} from './totalGrossSalaryVnd'
+import {totalInsurancePercent} from "../data/data";
 import {calculateInsurance} from './calculateInsurance'
 
 export const calculateInsuranceEmployerPay = (typeOfInsurance, insurance, income) =>{
     const percent = +insurance[typeOfInsurance]
     const valueToCalculateInsurance =  calculateInsurance(typeOfInsurance, insurance, income) / percent
-    const percentInsuranceEmployerPay = defaultInsurancePercentEmployerPay[typeOfInsurance] - percent
-    return Math.floor((valueToCalculateInsurance * percentInsuranceEmployerPay))
+    const percentInsuranceEmployerPay = totalInsurancePercent[typeOfInsurance] - percent
+    return Math.ceil((valueToCalculateInsurance * percentInsuranceEmployerPay))
 }

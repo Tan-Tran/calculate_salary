@@ -1,17 +1,15 @@
 import { useState } from 'react'
 import './App.css'
 
-import {initialInputData, initialResult} from './data/data'
+import {initialInputData, initialResult, totalInsurancePercent} from './data/data'
 
 import Header from './components/Header'
 import Card from './UI/Card'
 import ShowResult from './components/ShowResult'
 import InformationInput from './components/InformationInput'
-import {calculatePersonalIncomeTax} from './functions/calculatePersonalIncomeTax'
 import {totalGrossSalaryVnd} from './functions/totalGrossSalaryVnd'
-import {totalReductionFamily} from './functions/totalReductionFamily'
-import {calculateInsurance} from './functions/calculateInsurance'
-import {calculateInsuranceEmployerPay} from './functions/calculateInsuranceEmployerPay'
+import {calculateNetSalary} from './functions/calculateNetSalary'
+import {binarySearchGrossFromNet} from './functions/binarySearchGrossFromNet'
 
 function App() {
   const[values, setValues] = useState(initialInputData)
@@ -27,64 +25,26 @@ function App() {
 
   const[detailData, setDetailData] = useState(initialResult)
 
-  const calculateNetSalary = ({income, insurance, reduction}) =>{
-    const totalGrossSalary = totalGrossSalaryVnd(income)
-    const socialInsurance = Math.ceil(calculateInsurance('socialPercent', insurance, income))
-    const healthInsurance = Math.ceil(calculateInsurance('healthPercent', insurance, income))
-    const unEmployedInsurance = Math.floor(calculateInsurance('unEmployedPercent', insurance, income))   
-    const incomeBeforeTax = totalGrossSalary - socialInsurance - healthInsurance - unEmployedInsurance
-    const taxableIncome = ((incomeBeforeTax - totalReductionFamily(reduction)) < 0)? 0: (incomeBeforeTax - totalReductionFamily(reduction))
-    const detailPersonIncomeTax = calculatePersonalIncomeTax(taxableIncome)
-    const personalIncomeTax = detailPersonIncomeTax.totalPersonIncomeTax
-    const netSalary = incomeBeforeTax - personalIncomeTax
-    return netSalary
-  }
-
-  const binarySearchGross = (leftGross, rightGross, net, income, insurance, reduction) =>{
-    if(rightGross >= leftGross){
-      const middleGross = Math.floor((leftGross + rightGross)/ 2)
-      income = {...income, VND: middleGross, USD: 0}
-      let tempNetSalary = Math.ceil(calculateNetSalary({income: income, insurance: insurance, reduction: reduction}))
-      if(tempNetSalary === net){
-        calculateGrossToNet({income: income, insurance: insurance, reduction: reduction})
-      }
-
-      if(tempNetSalary < net){
-        return binarySearchGross(middleGross, rightGross, net, income, insurance, reduction)
-      }
-      
-      if(tempNetSalary > net){
-        return binarySearchGross(leftGross, middleGross, net, income, insurance, reduction)
-      }
-    }
-    return -1;
-  }
-
   const calculateNetToGross = ({income, insurance, reduction}) =>{
     let factor = 2;
     const net = totalGrossSalaryVnd(income);
     let left = 0
     let right = factor * net
-    const grossValue = binarySearchGross(left, right, net, income, insurance, reduction)
-    return grossValue
-  }
-
-  const calculateGrossToNet = ({income, insurance, reduction}) =>{
-    const totalGrossSalary = totalGrossSalaryVnd(income)
-    const socialInsurance = Math.ceil(calculateInsurance('socialPercent', insurance, income))
-    const healthInsurance = Math.ceil(calculateInsurance('healthPercent', insurance, income))
-    const unEmployedInsurance = Math.floor(calculateInsurance('unEmployedPercent', insurance, income))     
-    const incomeBeforeTax = totalGrossSalary - socialInsurance - healthInsurance - unEmployedInsurance
-    const taxableIncome = ((incomeBeforeTax - totalReductionFamily(reduction)) < 0)? 0: incomeBeforeTax - totalReductionFamily(reduction)
-    const detailPersonIncomeTax = calculatePersonalIncomeTax(taxableIncome)
-    const personalIncomeTax = Math.floor(detailPersonIncomeTax.totalPersonIncomeTax)
-    const netSalary = Math.ceil(incomeBeforeTax - personalIncomeTax)
-    const grossSalaryUsd = totalGrossSalary / income.exchangeRate
-    const netSalaryUsd = netSalary / income.exchangeRate;
-    const socialInsuranceEmployerPay = calculateInsuranceEmployerPay('socialPercent', insurance, income)
-    const healthInsuranceEmployerPay = calculateInsuranceEmployerPay('healthPercent', insurance, income)
-    const unEmployedInsuranceEmployerPay = calculateInsuranceEmployerPay('unEmployedPercent', insurance, income)
-
+    const {totalGrossSalary,
+      socialInsurance, 
+      healthInsurance, 
+      unEmployedInsurance, 
+      incomeBeforeTax, 
+      taxableIncome, 
+      detailPersonIncomeTax, 
+      personalIncomeTax, 
+      netSalary,
+      grossSalaryUsd,
+      netSalaryUsd,
+      socialInsuranceEmployerPay,
+      healthInsuranceEmployerPay,
+      unEmployedInsuranceEmployerPay
+    } = binarySearchGrossFromNet(left, right, net, income, insurance, reduction)
     setDetailData((previous) =>{
       return{
         ...previous,
@@ -108,11 +68,62 @@ function App() {
         personIncomeTaxDetail: detailPersonIncomeTax,
         employerPay: {
           grossSalary: totalGrossSalary,
-          socialPercent: 25.5 - insurance.socialPercent,
+          socialPercent: totalInsurancePercent.socialPercent - insurance.socialPercent,
           socialInsurance: socialInsuranceEmployerPay,
-          healthPercent: 4.5 - insurance.healthPercent,
+          healthPercent: totalInsurancePercent.healthPercent - insurance.healthPercent,
           healthInsurance: healthInsuranceEmployerPay,
-          unEmployedPercent: 2 - insurance.unEmployedPercent,
+          unEmployedPercent: totalInsurancePercent.unEmployedPercent - insurance.unEmployedPercent,
+          unEmployedInsurance: unEmployedInsuranceEmployerPay,
+          total: totalGrossSalary + socialInsuranceEmployerPay + healthInsuranceEmployerPay + unEmployedInsuranceEmployerPay
+        }
+      }
+    })
+  }
+
+  const calculateGrossToNet = ({income, insurance, reduction}) =>{
+    const { totalGrossSalary,
+            socialInsurance, 
+            healthInsurance, 
+            unEmployedInsurance, 
+            incomeBeforeTax, 
+            taxableIncome, 
+            detailPersonIncomeTax, 
+            personalIncomeTax, 
+            netSalary,
+            grossSalaryUsd,
+            netSalaryUsd,
+            socialInsuranceEmployerPay,
+            healthInsuranceEmployerPay,
+            unEmployedInsuranceEmployerPay
+          } = calculateNetSalary({income: income, insurance: insurance, reduction: reduction})
+    setDetailData((previous) =>{
+      return{
+        ...previous,
+        explainDetail:{
+          grossSalary: totalGrossSalary,
+          socialInsurance: socialInsurance,
+          healthInsurance: healthInsurance,
+          unEmployedInsurance: unEmployedInsurance,
+          incomeBeforeTax: incomeBeforeTax,
+          taxableIncome: taxableIncome,
+          personalIncomeTax: personalIncomeTax,
+          netSalary: netSalary,
+          grossSalaryUsd: grossSalaryUsd,
+          netSalaryUsd: netSalaryUsd,
+          socialPercent: insurance.socialPercent,
+          healthPercent: insurance.healthPercent,
+          unEmployedPercent: insurance.unEmployedPercent,
+          reductionPersonal: reduction.reductionPersonal,
+          reductionDependant: reduction.reductionDependant * reduction.numberOfDependent,
+        },
+        personIncomeTaxDetail: detailPersonIncomeTax,
+        employerPay: {
+          grossSalary: totalGrossSalary,
+          socialPercent: totalInsurancePercent.socialPercent - insurance.socialPercent,
+          socialInsurance: socialInsuranceEmployerPay,
+          healthPercent: totalInsurancePercent.healthPercent - insurance.healthPercent,
+          healthInsurance: healthInsuranceEmployerPay,
+          unEmployedPercent: totalInsurancePercent.unEmployedPercent - insurance.unEmployedPercent,
           unEmployedInsurance: unEmployedInsuranceEmployerPay,
           total: totalGrossSalary + socialInsuranceEmployerPay + healthInsuranceEmployerPay + unEmployedInsuranceEmployerPay
         }

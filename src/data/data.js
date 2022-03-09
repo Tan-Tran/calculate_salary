@@ -88,7 +88,7 @@ export const initialResult = {
     }
 }
 
-export const defaultInsurancePercentEmployerPay = {
+export const totalInsurancePercent = {
   socialPercent: 25.5,
   healthPercent: 4.5,
   unEmployedPercent: 2,
