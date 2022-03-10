@@ -25,9 +25,58 @@ function App() {
     });
   }
 
-  console.log(calculateNetToGrossByFormula({income: values.income, insurance: values.insurance, reduction: values.reduction}))
-
   const[detailData, setDetailData] = useState(initialResult)
+
+  const calculateNetToGrossSolution2 = ({income, insurance, reduction}) =>{
+    const {totalGrossSalary,
+      socialInsurance, 
+      healthInsurance, 
+      unEmployedInsurance, 
+      incomeBeforeTax, 
+      taxableIncome, 
+      detailPersonIncomeTax, 
+      personalIncomeTax, 
+      netSalary,
+      grossSalaryUsd,
+      netSalaryUsd,
+      socialInsuranceEmployerPay,
+      healthInsuranceEmployerPay,
+      unEmployedInsuranceEmployerPay
+    } = calculateNetToGrossByFormula({income: income, insurance: insurance, reduction: reduction})
+    setDetailData((previous) =>{
+      return{
+        ...previous,
+        explainDetail:{
+          grossSalary: totalGrossSalary,
+          socialInsurance: socialInsurance,
+          healthInsurance: healthInsurance,
+          unEmployedInsurance: unEmployedInsurance,
+          incomeBeforeTax: incomeBeforeTax,
+          taxableIncome: taxableIncome,
+          personalIncomeTax: personalIncomeTax,
+          netSalary: netSalary,
+          grossSalaryUsd: grossSalaryUsd,
+          netSalaryUsd: netSalaryUsd,
+          socialPercent: insurance.socialPercent,
+          healthPercent: insurance.healthPercent,
+          unEmployedPercent: insurance.unEmployedPercent,
+          reductionPersonal: +reduction.reductionPersonal,
+          reductionDependant: reduction.reductionDependant * reduction.numberOfDependent,
+        },
+        personIncomeTaxDetail: detailPersonIncomeTax,
+        employerPay: {
+          grossSalary: totalGrossSalary,
+          socialPercent: totalInsurancePercent.socialPercent - insurance.socialPercent,
+          socialInsurance: socialInsuranceEmployerPay,
+          healthPercent: totalInsurancePercent.healthPercent - insurance.healthPercent,
+          healthInsurance: healthInsuranceEmployerPay,
+          unEmployedPercent: totalInsurancePercent.unEmployedPercent - insurance.unEmployedPercent,
+          unEmployedInsurance: unEmployedInsuranceEmployerPay,
+          total: totalGrossSalary + socialInsuranceEmployerPay + healthInsuranceEmployerPay + unEmployedInsuranceEmployerPay
+        }
+      }
+    })
+  }
 
   const calculateNetToGross = ({income, insurance, reduction}) =>{
     let factor = 2;
@@ -66,7 +115,7 @@ function App() {
           socialPercent: insurance.socialPercent,
           healthPercent: insurance.healthPercent,
           unEmployedPercent: insurance.unEmployedPercent,
-          reductionPersonal: reduction.reductionPersonal,
+          reductionPersonal: +reduction.reductionPersonal,
           reductionDependant: reduction.reductionDependant * reduction.numberOfDependent,
         },
         personIncomeTaxDetail: detailPersonIncomeTax,
@@ -118,7 +167,7 @@ function App() {
           healthPercent: insurance.healthPercent,
           unEmployedPercent: insurance.unEmployedPercent,
           reductionPersonal: reduction.reductionPersonal,
-          reductionDependant: reduction.reductionDependant * reduction.numberOfDependent,
+          reductionDependant: +reduction.reductionDependant * reduction.numberOfDependent,
         },
         personIncomeTaxDetail: detailPersonIncomeTax,
         employerPay: {
@@ -146,6 +195,7 @@ function App() {
           updateData = {updateDataHandler}
           calculateGrossToNet = {() => calculateGrossToNet({income: values.income, insurance: values.insurance, reduction: values.reduction})}
           calculateNetToGross = {() => calculateNetToGross({income: values.income, insurance: values.insurance, reduction: values.reduction})}
+          calculateNetToGrossSolution2 = {() => calculateNetToGrossSolution2({income: values.income, insurance: values.insurance, reduction: values.reduction})}
         />
         <ShowResult 
           explainDetailData = {detailData.explainDetail}

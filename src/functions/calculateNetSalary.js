@@ -6,29 +6,29 @@ import {calculateInsuranceEmployerPay} from './calculateInsuranceEmployerPay'
 
 export const calculateNetSalary = ({income, insurance, reduction}) =>{
   const totalGrossSalary = totalGrossSalaryVnd(income)
-  const socialInsurance = Math.ceil(calculateInsurance('socialPercent', insurance, income))
-  const healthInsurance = Math.ceil(calculateInsurance('healthPercent', insurance, income))
-  const unEmployedInsurance = Math.floor(calculateInsurance('unEmployedPercent', insurance, income))   
+  const socialInsurance = calculateInsurance('socialPercent', insurance, income)
+  const healthInsurance = calculateInsurance('healthPercent', insurance, income)
+  const unEmployedInsurance = calculateInsurance('unEmployedPercent', insurance, income)  
   const incomeBeforeTax = totalGrossSalary - socialInsurance - healthInsurance - unEmployedInsurance
   const taxableIncome = ((incomeBeforeTax - totalReductionFamily(reduction)) < 0)? 0: (incomeBeforeTax - totalReductionFamily(reduction))
   const detailPersonIncomeTax = calculatePersonalIncomeTax(taxableIncome)
-  const personalIncomeTax = Math.floor(detailPersonIncomeTax.totalPersonIncomeTax)
-  const netSalary = Math.ceil(incomeBeforeTax - personalIncomeTax)
+  const personalIncomeTax = detailPersonIncomeTax.totalPersonIncomeTax
+  const netSalary = incomeBeforeTax - personalIncomeTax
   const grossSalaryUsd = totalGrossSalary / income.exchangeRate
   const netSalaryUsd = netSalary / income.exchangeRate;
   const socialInsuranceEmployerPay = calculateInsuranceEmployerPay('socialPercent', insurance, income)
   const healthInsuranceEmployerPay = calculateInsuranceEmployerPay('healthPercent', insurance, income)
   const unEmployedInsuranceEmployerPay = calculateInsuranceEmployerPay('unEmployedPercent', insurance, income)
   return{
-    totalGrossSalary: totalGrossSalary,
-    socialInsurance: socialInsurance,
-    healthInsurance: healthInsurance,
-    unEmployedInsurance: unEmployedInsurance,
-    incomeBeforeTax: incomeBeforeTax,
-    taxableIncome: taxableIncome,
+    totalGrossSalary: Math.ceil(totalGrossSalary),
+    socialInsurance: Math.ceil(socialInsurance),
+    healthInsurance: Math.ceil(healthInsurance),
+    unEmployedInsurance: Math.floor(unEmployedInsurance),
+    incomeBeforeTax: Math.floor(incomeBeforeTax),
+    taxableIncome: Math.floor(taxableIncome),
     detailPersonIncomeTax: detailPersonIncomeTax,
-    personalIncomeTax: personalIncomeTax,
-    netSalary: netSalary,
+    personalIncomeTax: Math.floor(personalIncomeTax),
+    netSalary: Math.ceil(netSalary),
     grossSalaryUsd: grossSalaryUsd,
     netSalaryUsd: netSalaryUsd,
     socialInsuranceEmployerPay: socialInsuranceEmployerPay,

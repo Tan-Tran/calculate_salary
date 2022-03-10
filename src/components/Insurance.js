@@ -3,16 +3,25 @@ import classes from './Insurance.module.css'
 import {region} from '../data/data'
 import info from '../image/get_info.png'
 import InfoModal from '../UI/InfoModal'
+import validateNumber from '../functions/validates/validateNumber'
 
 const Insurance = ({insurance, updateInsurance}) =>{
+    const[error, setError] = useState(false)
     const[isShowInfoModal, setIsShowInfoModal] = useState(false)
-
+    
     const showInfoModalHandler = () =>{
         setIsShowInfoModal(!isShowInfoModal);
     }
 
     const changeInputHandler = (event) => {
+        const value = event.target.value
         const name = event.target.name;
+
+        if(name !=='fullWage' && !validateNumber(value)){
+            setError(true)
+        }else{
+            setError(false)
+        }
 
         if(name === 'fullWage'){
             updateInsurance('insurance',{
@@ -25,14 +34,14 @@ const Insurance = ({insurance, updateInsurance}) =>{
         if(name === 'region'){
             updateInsurance('insurance',{
                 ...insurance,
-                [name]: region[event.target.value]
+                [name]: region[value]
             })
             return;
         }
 
         updateInsurance('insurance',{
             ...insurance,
-            [name]: event.target.value,
+            [name]: value,
         })
     }
 
@@ -40,6 +49,8 @@ const Insurance = ({insurance, updateInsurance}) =>{
         <div className={classes.insurance}>
             <InfoModal isShow={isShowInfoModal} showInfoModalHandler={showInfoModalHandler}/>
             <h4 className={classes.title}>Insurance</h4>
+            {/* chicken error message */}
+            {error && <div style={{color:'red'}}>Need a number</div>}
             <div className={classes.content}>                
                 <div>
                     <span>Pay for</span>
@@ -120,7 +131,7 @@ const Insurance = ({insurance, updateInsurance}) =>{
                 <div style={{marginTop:'10px'}}>
                     <span>
                         <label>Region: </label>
-                        <a><img src={info} onClick={showInfoModalHandler}/></a>
+                        <span><img alt="" src={info} onClick={showInfoModalHandler}/></span>
                     </span>
                     {region.map((item) =>{
                         return (

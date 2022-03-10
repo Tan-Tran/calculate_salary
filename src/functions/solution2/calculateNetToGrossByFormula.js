@@ -2,6 +2,7 @@ import {totalReductionFamily} from '../totalReductionFamily'
 import {totalGrossSalaryVnd} from '../totalGrossSalaryVnd'
 import {calculateIncomeBeforeTax} from './calculateIncomeBeforeTax'
 import {defaultInsurance} from '../../data/data'
+import {calculateNetSalary} from '../calculateNetSalary'
 
 export const calculateNetToGrossByFormula = ({income, insurance, reduction}) => {
     const netSalary =  totalGrossSalaryVnd(income)
@@ -16,15 +17,23 @@ export const calculateNetToGrossByFormula = ({income, insurance, reduction}) => 
     if(insurance.fullWage){
         if(convertIncome > 0){            
             if(incomeBeforeTax < maximumInsuranceBaseOnMinimumWage){
-                return (incomeBeforeTax + totalReduction) / (1-((socialInsurancePercent + healthInsurancePercent + unEmployedInsurancePercent)/100))
+                const grossValue =  (incomeBeforeTax + totalReduction) / (1-((socialInsurancePercent + healthInsurancePercent + unEmployedInsurancePercent)/100))
+                income ={...income, VND: grossValue, USD: 0}
+                return calculateNetSalary({income: income, insurance: insurance, reduction: reduction})
             }else{
                 if(netSalary < maxGrossBaseOnMaximumUnEmployed){
-                    return (incomeBeforeTax + totalReduction + maximumInsuranceBaseOnMinimumWage * ((socialInsurancePercent + healthInsurancePercent)/100)) / (1-unEmployedInsurancePercent/100)
+                    const grossValue =  (incomeBeforeTax + totalReduction + maximumInsuranceBaseOnMinimumWage * ((socialInsurancePercent + healthInsurancePercent)/100)) / (1-unEmployedInsurancePercent/100)
+                    income ={...income, VND: grossValue, USD: 0}
+                    return calculateNetSalary({income: income, insurance: insurance, reduction: reduction})
                 }
             }            
-            return incomeBeforeTax + totalReduction + maximumInsuranceBaseOnMinimumWage * ((socialInsurancePercent + healthInsurancePercent)/100) + insurance.region.maximumUnemployedInsurance
+            const grossValue = incomeBeforeTax + totalReduction + maximumInsuranceBaseOnMinimumWage * ((socialInsurancePercent + healthInsurancePercent)/100) + insurance.region.maximumUnemployedInsurance
+            income ={...income, VND: grossValue, USD: 0}
+            return calculateNetSalary({income: income, insurance: insurance, reduction: reduction})
         }
-        return netSalary / (1-((socialInsurancePercent + healthInsurancePercent + unEmployedInsurancePercent)/100))
+        const grossValue = netSalary / (1-((socialInsurancePercent + healthInsurancePercent + unEmployedInsurancePercent)/100))
+        income ={...income, VND: grossValue, USD: 0}
+        return calculateNetSalary({income: income, insurance: insurance, reduction: reduction})
     }else{
         const other = +insurance.other
         let socialInsurance = other * socialInsurancePercent / 100
@@ -36,20 +45,28 @@ export const calculateNetToGrossByFormula = ({income, insurance, reduction}) => 
                 healthInsurance =  maximumInsuranceBaseOnMinimumWage * healthInsurancePercent / 100
                 if(other > maxGrossBaseOnMaximumUnEmployed){
                     unEmployedInsurance = insurance.region.maximumUnemployedInsurance
-                    return incomeBeforeTax + totalReduction + socialInsurance + healthInsurance + unEmployedInsurance
+                    const grossValue = incomeBeforeTax + totalReduction + socialInsurance + healthInsurance + unEmployedInsurance
+                    income ={...income, VND: grossValue, USD: 0}
+                    return calculateNetSalary({income: income, insurance: insurance, reduction: reduction})
                 }
             }
-            return incomeBeforeTax + totalReduction + socialInsurance + healthInsurance + unEmployedInsurance
+            const grossValue = incomeBeforeTax + totalReduction + socialInsurance + healthInsurance + unEmployedInsurance
+            income ={...income, VND: grossValue, USD: 0}
+            return calculateNetSalary({income: income, insurance: insurance, reduction: reduction})
         }else{
             if(other > maximumInsuranceBaseOnMinimumWage){
                 socialInsurance =  maximumInsuranceBaseOnMinimumWage * socialInsurancePercent / 100
                 healthInsurance =  maximumInsuranceBaseOnMinimumWage * healthInsurancePercent / 100
                 if(other > maxGrossBaseOnMaximumUnEmployed){
                     unEmployedInsurance = insurance.region.maximumUnemployedInsurance
-                    return netSalary + socialInsurance + healthInsurance + unEmployedInsurance
+                    const grossValue =  netSalary + socialInsurance + healthInsurance + unEmployedInsurance
+                    income ={...income, VND: grossValue, USD: 0}
+                    return calculateNetSalary({income: income, insurance: insurance, reduction: reduction})
                 }                
             }
-            return netSalary + socialInsurance + healthInsurance + unEmployedInsurance
+            const grossValue =  netSalary + socialInsurance + healthInsurance + unEmployedInsurance
+            income ={...income, VND: grossValue, USD: 0}
+            return calculateNetSalary({income: income, insurance: insurance, reduction: reduction})
         }
     }
 }

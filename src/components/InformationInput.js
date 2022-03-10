@@ -4,7 +4,7 @@ import Reduction from './Reduction'
 import Button from '../UI/Button'
 import classes from './InformationInput.module.css'
 
-const InformationInput = ({income, insurance, reduction, updateData, calculateGrossToNet, calculateNetToGross}) =>{
+const InformationInput = ({income, insurance, reduction, updateData, calculateGrossToNet, calculateNetToGross, calculateNetToGrossSolution2}) =>{
     const changeInputHandler = (field, data) =>{
         updateData(field, data)
     }
@@ -16,6 +16,7 @@ const InformationInput = ({income, insurance, reduction, updateData, calculateGr
             <div style={{marginLeft:'110px'}} className={classes.title} >
                 <Button onClick={calculateGrossToNet}>GROSS → NET</Button>
                 <Button onClick={calculateNetToGross}>NET → GROSS</Button>
+                <Button onClick={calculateNetToGrossSolution2}>NET → GROSS Solution2</Button>
             </div>           
         </div>
     )

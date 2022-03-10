@@ -1,16 +1,29 @@
 import classes from './Reduction.module.css'
+import validateNumber from '../functions/validates/validateNumber'
+import { useState } from 'react';
 
 const Reduction = ({reduction, updateReduction}) =>{
+    const[error, setError] = useState(false)
     const changeInputHandler = (event) =>{
+        const value = event.target.value
+        // chicken validate
+        if(!validateNumber(value)){
+            setError(true)
+        }else{
+            setError(false)
+        }
+        //
         const name = event.target.name;
         updateReduction('reduction',{
             ...reduction,
-            [name]: event.target.value,
+            [name]: value,
         })
     }
     return(
         <div className={classes.reduction}>
             <h4 className={classes.tittle}>Reduction based on family circumstances</h4>
+            {/* chicken error message */}
+            {error && <div style={{color:'red'}}>Need a number</div>}
             <div className={classes.content}>
                 <span>
                     <label>Personal: </label>
