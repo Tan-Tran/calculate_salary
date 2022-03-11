@@ -78,7 +78,7 @@ export const initialResult = {
       thirtyFivePercent: 0,
       totalPersonIncomeTax: 0,
     },
-    employerPay:{
+    employerPayDetail:{
       socialPercent: 0,
       socialInsurance: 0,
       healthPercent: 0,

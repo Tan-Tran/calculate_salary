@@ -2,7 +2,7 @@ import classes from './Reduction.module.css'
 import validateNumber from '../functions/validates/validateNumber'
 import { useState } from 'react';
 
-const Reduction = ({reduction, updateReduction}) =>{
+const Reduction = ({reduction, onChange}) =>{
     const[error, setError] = useState(false)
     const changeInputHandler = (event) =>{
         const value = event.target.value
@@ -14,7 +14,7 @@ const Reduction = ({reduction, updateReduction}) =>{
         }
         //
         const name = event.target.name;
-        updateReduction('reduction',{
+        onChange('reduction',{
             ...reduction,
             [name]: value,
         })

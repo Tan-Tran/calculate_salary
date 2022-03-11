@@ -4,9 +4,8 @@ import './App.css'
 import {initialInputData, initialResult, totalInsurancePercent} from './data/data'
 
 import Header from './components/Header'
-import Card from './UI/Card'
-import ShowResult from './components/ShowResult'
-import InformationInput from './components/InformationInput'
+import Main from './components/Main'
+
 import {totalGrossSalaryVnd} from './functions/totalGrossSalaryVnd'
 import {calculateNetSalary} from './functions/calculateNetSalary'
 import {binarySearchGrossFromNet} from './functions/binarySearchGrossFromNet'
@@ -15,17 +14,18 @@ import {binarySearchGrossFromNet} from './functions/binarySearchGrossFromNet'
 import {calculateNetToGrossByFormula} from './functions/solution2/calculateNetToGrossByFormula'
 
 function App() {
-  const[values, setValues] = useState(initialInputData)
+
+  const[inputData, setInputData] = useState(initialInputData)
+  const[resultData, setResultData] = useState(initialResult)
+
   const updateDataHandler = (field, data) =>{
-    setValues((previous) =>{
+    setInputData((previous) =>{
       return{
         ...previous,
         [field]: data,
       }
     });
   }
-
-  const[detailData, setDetailData] = useState(initialResult)
 
   const calculateNetToGrossSolution2 = ({income, insurance, reduction}) =>{
     const {totalGrossSalary,
@@ -42,8 +42,8 @@ function App() {
       socialInsuranceEmployerPay,
       healthInsuranceEmployerPay,
       unEmployedInsuranceEmployerPay
-    } = calculateNetToGrossByFormula({income: income, insurance: insurance, reduction: reduction})
-    setDetailData((previous) =>{
+    } = calculateNetToGrossByFormula({income, insurance, reduction})
+    setResultData((previous) =>{
       return{
         ...previous,
         explainDetail:{
@@ -64,7 +64,7 @@ function App() {
           reductionDependant: reduction.reductionDependant * reduction.numberOfDependent,
         },
         personIncomeTaxDetail: detailPersonIncomeTax,
-        employerPay: {
+        employerPayDetail: {
           grossSalary: totalGrossSalary,
           socialPercent: totalInsurancePercent.socialPercent - insurance.socialPercent,
           socialInsurance: socialInsuranceEmployerPay,
@@ -98,7 +98,7 @@ function App() {
       healthInsuranceEmployerPay,
       unEmployedInsuranceEmployerPay
     } = binarySearchGrossFromNet(left, right, net, income, insurance, reduction)
-    setDetailData((previous) =>{
+    setResultData((previous) =>{
       return{
         ...previous,
         explainDetail:{
@@ -119,7 +119,7 @@ function App() {
           reductionDependant: reduction.reductionDependant * reduction.numberOfDependent,
         },
         personIncomeTaxDetail: detailPersonIncomeTax,
-        employerPay: {
+        employerPayDetail: {
           grossSalary: totalGrossSalary,
           socialPercent: totalInsurancePercent.socialPercent - insurance.socialPercent,
           socialInsurance: socialInsuranceEmployerPay,
@@ -148,8 +148,8 @@ function App() {
             socialInsuranceEmployerPay,
             healthInsuranceEmployerPay,
             unEmployedInsuranceEmployerPay
-          } = calculateNetSalary({income: income, insurance: insurance, reduction: reduction})
-    setDetailData((previous) =>{
+          } = calculateNetSalary({income, insurance, reduction})
+    setResultData((previous) =>{
       return{
         ...previous,
         explainDetail:{
@@ -170,7 +170,7 @@ function App() {
           reductionDependant: +reduction.reductionDependant * reduction.numberOfDependent,
         },
         personIncomeTaxDetail: detailPersonIncomeTax,
-        employerPay: {
+        employerPayDetail: {
           grossSalary: totalGrossSalary,
           socialPercent: totalInsurancePercent.socialPercent - insurance.socialPercent,
           socialInsurance: socialInsuranceEmployerPay,
@@ -187,22 +187,14 @@ function App() {
   return (
     <div className="App">
       <Header/>
-      <Card>
-        <InformationInput 
-          income = {values.income} 
-          insurance = {values.insurance} 
-          reduction = {values.reduction} 
+      <Main 
+          inputData={inputData} 
+          resultData={resultData}
           updateData = {updateDataHandler}
-          calculateGrossToNet = {() => calculateGrossToNet({income: values.income, insurance: values.insurance, reduction: values.reduction})}
-          calculateNetToGross = {() => calculateNetToGross({income: values.income, insurance: values.insurance, reduction: values.reduction})}
-          calculateNetToGrossSolution2 = {() => calculateNetToGrossSolution2({income: values.income, insurance: values.insurance, reduction: values.reduction})}
-        />
-        <ShowResult 
-          explainDetailData = {detailData.explainDetail}
-          personIncomeTaxDetailData = {detailData.personIncomeTaxDetail}
-          employerPayDetail = {detailData.employerPay}
-        />
-      </Card>
+          calculateGrossToNet = {() => calculateGrossToNet({income: inputData.income, insurance: inputData.insurance, reduction: inputData.reduction})}
+          calculateNetToGross = {() => calculateNetToGross({income: inputData.income, insurance: inputData.insurance, reduction: inputData.reduction})}
+          calculateNetToGrossSolution2 = {() => calculateNetToGrossSolution2({income: inputData.income, insurance: inputData.insurance, reduction: inputData.reduction})}
+      />
     </div>
   );
 }

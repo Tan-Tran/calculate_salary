@@ -5,7 +5,7 @@ import info from '../image/get_info.png'
 import InfoModal from '../UI/InfoModal'
 import validateNumber from '../functions/validates/validateNumber'
 
-const Insurance = ({insurance, updateInsurance}) =>{
+const Insurance = ({insurance, onChange}) =>{
     const[error, setError] = useState(false)
     const[isShowInfoModal, setIsShowInfoModal] = useState(false)
     
@@ -24,7 +24,7 @@ const Insurance = ({insurance, updateInsurance}) =>{
         }
 
         if(name === 'fullWage'){
-            updateInsurance('insurance',{
+            onChange('insurance',{
                 ...insurance,
                 [name]: !insurance.fullWage
             })
@@ -32,14 +32,14 @@ const Insurance = ({insurance, updateInsurance}) =>{
         }
 
         if(name === 'region'){
-            updateInsurance('insurance',{
+            onChange('insurance',{
                 ...insurance,
                 [name]: region[value]
             })
             return;
         }
 
-        updateInsurance('insurance',{
+        onChange('insurance',{
             ...insurance,
             [name]: value,
         })
