@@ -5,9 +5,8 @@ export const binarySearchGrossFromNet = (leftGross, rightGross, net, income, ins
     if(rightGross >= leftGross){
       const middleGross = Math.floor((leftGross + rightGross)/ 2)
       income = {...income, VND: middleGross, USD: 0}
-      let tempNetSalary = Math.ceil(calculateNetSalary({income: income, insurance: insurance, reduction: reduction}).netSalary)
+      let tempNetSalary = Math.round(calculateNetSalary({income: income, insurance: insurance, reduction: reduction}).netSalary)
       if(tempNetSalary === net){
-        // calculateGrossToNet({income: income, insurance: insurance, reduction: reduction})
         return calculateNetSalary({income: income, insurance: insurance, reduction: reduction})
       }
 

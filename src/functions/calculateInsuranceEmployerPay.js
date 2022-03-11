@@ -5,5 +5,5 @@ export const calculateInsuranceEmployerPay = (typeOfInsurance, insurance, income
     const percent = +insurance[typeOfInsurance]
     const valueToCalculateInsurance =  calculateInsurance(typeOfInsurance, insurance, income) / percent
     const percentInsuranceEmployerPay = totalInsurancePercent[typeOfInsurance] - percent
-    return Math.ceil((valueToCalculateInsurance * percentInsuranceEmployerPay))
+    return Math.round((valueToCalculateInsurance * percentInsuranceEmployerPay))
 }

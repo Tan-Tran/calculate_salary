@@ -20,15 +20,15 @@ export const calculateNetSalary = ({income, insurance, reduction}) =>{
   const healthInsuranceEmployerPay = calculateInsuranceEmployerPay('healthPercent', insurance, income)
   const unEmployedInsuranceEmployerPay = calculateInsuranceEmployerPay('unEmployedPercent', insurance, income)
   return{
-    totalGrossSalary: Math.ceil(totalGrossSalary),
-    socialInsurance: Math.ceil(socialInsurance),
-    healthInsurance: Math.ceil(healthInsurance),
-    unEmployedInsurance: Math.floor(unEmployedInsurance),
-    incomeBeforeTax: Math.floor(incomeBeforeTax),
-    taxableIncome: Math.floor(taxableIncome),
+    totalGrossSalary: Math.round(totalGrossSalary),
+    socialInsurance: Math.round(socialInsurance),
+    healthInsurance: Math.round(healthInsurance),
+    unEmployedInsurance: Math.round(unEmployedInsurance),
+    incomeBeforeTax: Math.round(incomeBeforeTax),
+    taxableIncome: Math.round(taxableIncome),
     detailPersonIncomeTax: detailPersonIncomeTax,
-    personalIncomeTax: Math.floor(personalIncomeTax),
-    netSalary: Math.ceil(netSalary),
+    personalIncomeTax: Math.round(personalIncomeTax),
+    netSalary: Math.round(netSalary),
     grossSalaryUsd: grossSalaryUsd,
     netSalaryUsd: netSalaryUsd,
     socialInsuranceEmployerPay: socialInsuranceEmployerPay,
