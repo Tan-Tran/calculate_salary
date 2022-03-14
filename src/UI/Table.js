@@ -30,12 +30,11 @@ const Table = (props) =>{
             </table>}
             {(!top && left) && <table className={className}>
                 <tbody>
-                    {columns.map((column) =>{
-                        console.log(dataSource[column.dataIndex])
+                    {columns.map((column, index) =>{
                         return(
                             <tr key={column.key} className={classes[column.className]}>
-                                <th>{column.title}</th>
-                                <td>{dataSource[column.dataIndex]}</td>
+                                <th>{column.title}{column.percent? ` (${dataSource[index]['percent']}%${column.extendTitle? column.extendTitle:''})`:''}<br/>{column.subtitle? `${column.subtitle}`:''}</th>
+                                <td>{column.negative? '- ':''}{dataSource[index][column.dataIndex]}</td>
                             </tr>
                         )
                     })}
