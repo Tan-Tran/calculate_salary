@@ -1,8 +1,8 @@
 import classes from './InputInfo.module.css'
 
-import Income from './Income'
-import Insurance from './Insurance'
-import Reduction from './Reduction'
+import Income from '../income/Income'
+import Insurance from '../insurance/Insurance'
+import Reduction from '../reduction/Reduction'
 
 const InputInfo = ({income, insurance, reduction, updateData}) =>{
     const changeInputHandler = (field, data) =>{

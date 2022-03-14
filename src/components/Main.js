@@ -1,8 +1,8 @@
 
 import Card from '../UI/Card'
-import ButtonAction from './ButtonAction'
-import InputInfo from './InputInfo'
-import TableResult from './TableResult'
+import ButtonAction from '../components/button/ButtonAction'
+import InputInfo from './input_info/InputInfo'
+import TableResult from './table/TableResult'
 
 const Main = ({inputData, resultData, updateData, calculateGrossToNet, calculateNetToGross, calculateNetToGrossSolution2}) =>{
 

@@ -1,0 +1,40 @@
+.content{
+    margin-bottom: 20px
+  }
+  
+.datalist {
+border-collapse: collapse;
+width: 460px;
+color: #000;
+}
+
+.datalist th {
+font-weight: bold;
+}
+
+.datalist td {
+    padding-left: 25px;
+}
+
+.datalist th,
+.datalist td {
+padding: 6px;
+vertical-align: top;
+border: #cccccc 1px solid;
+font-size: 12px;
+text-align: right;
+}
+
+.row-note {
+background-color: #ededed;
+}
+
+
+.title {
+  font-weight: bold;
+  color: #3b5998;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+  

@@ -1,4 +1,4 @@
-export const region = [
+export const regions = [
     {
         id: 1,
         titleRegion: 'I',
@@ -44,7 +44,7 @@ export const initialInputData = {
       socialPercent: 8,
       healthPercent: 1.5,
       unEmployedPercent: 1,
-      region: region[0]
+      region: regions[0]
     },
     reduction:{
       reductionPersonal: 11000000,

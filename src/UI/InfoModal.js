@@ -7,7 +7,7 @@ import Button from '../UI/Button'
 const Backdrop = (props) =>{
     return(
         <Fragment>
-            {props.isShow && <div className={classes.overlay}></div>}
+            {props.isVisible && <div className={classes.overlay}></div>}
         </Fragment>
     )
 }
@@ -15,7 +15,7 @@ const Backdrop = (props) =>{
 const ModalOverLay = (props) =>{
     return (
         <Fragment>
-            {props.isShow && 
+            {props.isVisible && 
                 <div className={classes.content}>
                     <div className={classes.header}>
                         <span>Mức lương tối thiểu vùng 2017</span>
@@ -44,8 +44,8 @@ const ModalOverLay = (props) =>{
 const InfoModal = (props) =>{
     return(
         <React.Fragment>
-            {ReactDOM.createPortal(<Backdrop isShow={props.isShow}/>, document.getElementById("backdrop-root"))}
-            {ReactDOM.createPortal(<ModalOverLay isShow={props.isShow} showInfoModalHandler={props.showInfoModalHandler}/>, document.getElementById("overlay-root"))}
+            {ReactDOM.createPortal(<Backdrop isVisible={props.isVisible}/>, document.getElementById("backdrop-root"))}
+            {ReactDOM.createPortal(<ModalOverLay isVisible={props.isVisible} showInfoModalHandler={props.showInfoModalHandler}/>, document.getElementById("overlay-root"))}
         </React.Fragment>
     )
 }

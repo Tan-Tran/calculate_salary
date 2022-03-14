@@ -1,5 +1,4 @@
-import Button from '../UI/Button'
-
+import Button from '../../UI/Button'
 
 const Action = ({calculateGrossToNet, calculateNetToGross, calculateNetToGrossSolution2}) =>{
     return(

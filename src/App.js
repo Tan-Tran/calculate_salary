@@ -3,7 +3,7 @@ import './App.css'
 
 import {initialInputData, initialResult, totalInsurancePercent} from './data/data'
 
-import Header from './components/Header'
+import Header from './components/header/Header'
 import Main from './components/Main'
 
 import {totalGrossSalaryVnd} from './functions/totalGrossSalaryVnd'
