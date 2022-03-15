@@ -6,26 +6,7 @@ import Region from './Region'
 
 const Insurance = ({insurance, onChange}) =>{
 
-    const changeInputHandler = (event) => {
-        const value = event.target.value
-        const name = event.target.name;
-
-        if(name === 'fullWage'){
-            onChange('insurance',{
-                ...insurance,
-                [name]: !insurance.fullWage
-            })
-            return;
-        }
-
-        if(name === 'region'){
-            onChange('insurance',{
-                ...insurance,
-                [name]: regions[value]
-            })
-            return;
-        }
-
+    const changeInputHandler = (name, value) => {
         onChange('insurance',{
             ...insurance,
             [name]: value,
@@ -36,7 +17,7 @@ const Insurance = ({insurance, onChange}) =>{
         <div className={classes.insurance}>
             <h4 className={classes.title}>Insurance</h4>
             <div className={classes.content}>
-                <PayFor fullWage={insurance.fullWage} changeInputHandler={changeInputHandler}/>               
+                <PayFor insurance={insurance} changeInputHandler={changeInputHandler}/>               
                 <InsurancePercent
                     minimumWage = {insurance.minimumWage}
                     socialPercent = {insurance.socialPercent}

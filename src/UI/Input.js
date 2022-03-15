@@ -1,22 +1,12 @@
-import {Fragment} from 'react'
-const Input = ({item, onChange}) =>{
-    const {prefix, width, name, type, value, suffix, checked, disabled} = item
+
+const Input = (props) =>{
+    const {prefix, suffix, ...attributes} = props
     return(
-        <Fragment>
-            <span>
-                <label>{prefix}</label>
-                <input
-                    style ={{width: width}}
-                    name = {name}
-                    type = {type}
-                    value = {value}
-                    checked = {checked}
-                    disabled = {disabled}
-                    onChange = {onChange}
-                />
-                <label>{suffix}</label>
-            </span>
-        </Fragment>
+        <span>
+            <label>{prefix}</label>
+            <input {...attributes} />
+            <label>{suffix}</label>
+        </span>
     )
 }
 

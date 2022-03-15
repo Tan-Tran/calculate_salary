@@ -14,42 +14,39 @@ const Income = ({income, onChange}) =>{
             [name]: value
         })
     }
-
-    const vndItem = {
-        prefix: 'VND: ',
-        width: '100px',
-        name: 'VND',
-        value: incomeVnd,
-        suffix: '',
-        type: 'text',
-    }
-
-    const usdItem = {
-        prefix: 'USD: ',
-        width: '60px',
-        name: 'USD',
-        value: incomeUsd,
-        suffix: '',
-        type: 'text',
-    }
-
-    const exchangeRateItem = {
-        prefix: 'Exchange change rate: 1 USD = ',
-        width: '60px',
-        name: 'exchangeRate',
-        suffix: ' VND',
-        type: 'text',
-        value: exchangeRate,
-    }
-
-    const incomeItems = [vndItem, usdItem, exchangeRateItem]
-
+    
+    const incomeItems = [
+        {
+            prefix: 'VND: ',
+            style: {width:'100px'},
+            name: 'VND',
+            value: incomeVnd,
+            suffix: '',
+            type: 'text',
+        },
+        {
+            prefix: 'USD: ',
+            style: {width:'60px'},
+            name: 'USD',
+            value: incomeUsd,
+            suffix: '',
+            type: 'text',
+        },
+        {
+            prefix: 'Exchange change rate: 1 USD = ',
+            style: {width:'60px'},
+            name: 'exchangeRate',
+            suffix: ' VND',
+            type: 'text',
+            value: exchangeRate,
+        },
+    ]
     return(
         <div className={classes.income}>
             <h4 className={classes.tittle}>Income</h4>
             <div className={classes.content}>
                 {incomeItems.map((item) =>{
-                    return <Input item={item} key={item.name} onChange={changeInputHandler}/>
+                    return <Input {...item} key={item.name} onChange={changeInputHandler}/>
                 })}
             </div>
         </div>

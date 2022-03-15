@@ -3,6 +3,11 @@ import Input from "../../UI/Input"
 import InfoModal from "../../UI/InfoModal"
 import info from '../../image/get_info.png'
 const Region = ({regions, insurance, changeInputHandler}) =>{
+
+    const changeInputRegion = (event) =>{
+        changeInputHandler('region', regions[event.target.value])
+    }
+    
     const[isVisibleInfoModal, setIsShowInfoModal] = useState(false)
     const showInfoModalHandler = () =>{
         setIsShowInfoModal(!isVisibleInfoModal);
@@ -26,7 +31,7 @@ const Region = ({regions, insurance, changeInputHandler}) =>{
                         }
                         return (
                             <span key={region.id}>
-                                <Input item={regionItem} onChange={changeInputHandler}/>
+                                <Input {...regionItem} onChange={changeInputRegion}/>
                             </span>
                         )
                     })}

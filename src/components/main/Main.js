@@ -1,8 +1,8 @@
 
 import Card from '../../UI/Card'
-import ButtonAction from '../button/ButtonAction'
 import InputInfo from '../input_info/InputInfo'
 import TableResult from '../table/TableResult'
+import Button from '../../UI/Button'
 
 const Main = ({inputData, resultData, updateData, calculateGrossToNet, calculateNetToGross, calculateNetToGrossSolution2}) =>{
 
@@ -22,11 +22,11 @@ const Main = ({inputData, resultData, updateData, calculateGrossToNet, calculate
                 reduction = {reduction}
                 updateData = {updateData}                
             />
-            <ButtonAction
-                calculateGrossToNet = {calculateGrossToNet}
-                calculateNetToGross = {calculateNetToGross}
-                calculateNetToGrossSolution2 = {calculateNetToGrossSolution2}
-            />
+            <div style={{marginLeft:'110px'}} className="title" >
+                <Button onClick={calculateGrossToNet}>GROSS → NET</Button>
+                <Button onClick={calculateNetToGross}>NET → GROSS</Button>
+                <Button onClick={calculateNetToGrossSolution2}>NET → GROSS Solution2</Button>
+            </div>   
             <TableResult
                 explainDetailData = {explainDetailData}
                 personIncomeTaxData = {personIncomeTaxData}

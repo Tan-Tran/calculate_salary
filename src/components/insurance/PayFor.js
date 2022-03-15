@@ -1,36 +1,44 @@
 import Input from "../../UI/Input"
-const PayFor = ({fullWage, changeInputHandler}) =>{
-    const fullWageItem = {
-        id: 1,
-        prefix: 'Full wage ',
-        name: 'fullWage',
-        type: 'radio',
-        checked: fullWage
+const PayFor = ({insurance, changeInputHandler}) =>{
+
+    const changeInputPayFor = (event) =>{
+        const name = event.target.name
+        const value = event.target.value
+        if(name === 'fullWage'){
+            changeInputHandler(name, !insurance.fullWage)
+        }else{
+            changeInputHandler(name, value)
+        }
     }
 
-    const otherItem = {
-        id: 2, 
-        prefix: 'other ',
-        name: 'fullWage',
-        type: 'radio',
-        checked: !fullWage
-    }
-
-    const inputOther = {
-        id: 3,
-        name: 'other',
-        width: '70px',
-        disabled: fullWage,
-        suffix: ' VND'
-    }
-
-    const payforItems = [fullWageItem, otherItem, inputOther]
-
+    const payForItems = [
+        {
+            id: 1,
+            prefix: 'Full wage ',
+            name: 'fullWage',
+            type: 'radio',
+            checked: insurance.fullWage
+        },
+        {
+            id: 2, 
+            prefix: 'other ',
+            name: 'fullWage',
+            type: 'radio',
+            checked: !insurance.fullWage
+        },
+        {
+            id: 3,
+            name: 'other',
+            style: {width:'70px'},
+            disabled: insurance.fullWage,
+            suffix: ' VND'
+        }
+    ]
     return(
         <div>
             <span>Pay for</span>
-            {payforItems.map((item) =>{
-                return <Input item={item} key ={item.id} onChange={changeInputHandler}/>
+            {payForItems.map((item) =>{
+                return <Input {...item} key ={item.id} onChange={changeInputPayFor}/>
             })}
         </div>
     )

@@ -16,41 +16,39 @@ const Reduction = ({reduction, onChange}) =>{
         })
     }
 
-    const reductionPersonalItem = {
-        prefix: 'Personal: ',
-        suffix: ' VND',
-        width: '70px',
-        name: 'reductionPersonal',
-        type: 'text',
-        value: reductionPersonalValue,
-    }
-
-    const reductionDependantItem = {
-        prefix: 'Dependant: ',
-        suffix: ' VND',
-        width: '70px',
-        name: 'reductionDependant',
-        type: 'text',
-        value: reductionDependantValue,
-    }
-
-    const numberOfDependentItem = {
-        prefix: 'Number of dependant: ',
-        suffix: '',
-        width: '40px',
-        name: 'numberOfDependent',
-        type: 'text',
-        value: numberOfDependentValue,
-    }
-
-    const reductionItems = [reductionPersonalItem, reductionDependantItem, numberOfDependentItem]
+    const reductionItems = [
+        {
+            prefix: 'Personal: ',
+            suffix: ' VND',
+            style: {width:'70px'},
+            name: 'reductionPersonal',
+            type: 'text',
+            value: reductionPersonalValue,
+        },
+        {
+            prefix: 'Dependant: ',
+            suffix: ' VND',
+            style: {width:'70px'},
+            name: 'reductionDependant',
+            type: 'text',
+            value: reductionDependantValue,
+        },
+        {
+            prefix: 'Number of dependant: ',
+            suffix: '',
+            style: {width:'40px'},
+            name: 'numberOfDependent',
+            type: 'text',
+            value: numberOfDependentValue,
+        }
+    ]
 
     return(
         <div className={classes.reduction}>
             <h4 className={classes.tittle}>Reduction based on family circumstances</h4>
             <div className={classes.content}>
                 {reductionItems.map((item) =>{
-                    return <Input item={item} key={item.name} onChange={changeInputHandler}/>
+                    return <Input {...item} key={item.name} onChange={changeInputHandler}/>
                 })}
             </div>
         </div>
