@@ -4,7 +4,7 @@ import './App.css'
 import {initialInputData, initialResult, totalInsurancePercent} from './data/data'
 
 import Header from './components/header/Header'
-import Main from './components/Main'
+import Main from './components/main/Main'
 
 import {totalGrossSalaryVnd} from './functions/totalGrossSalaryVnd'
 import {calculateNetSalary} from './functions/calculateNetSalary'
