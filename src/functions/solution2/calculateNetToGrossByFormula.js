@@ -15,8 +15,9 @@ export const calculateNetToGrossByFormula = ({income, insurance, reduction}) => 
     const healthInsurancePercent = +insurance.healthPercent;
     const unEmployedInsurancePercent =  +insurance.unEmployedPercent;
     if(insurance.fullWage){
-        if(convertIncome > 0){          
-            if(incomeBeforeTax < maximumInsuranceBaseOnMinimumWage){
+        if(convertIncome > 0){
+            const grossValueAssume =  (incomeBeforeTax + totalReduction) / (1-((socialInsurancePercent + healthInsurancePercent + unEmployedInsurancePercent)/100))    
+            if(grossValueAssume < maximumInsuranceBaseOnMinimumWage){
                 const grossValue =  (incomeBeforeTax + totalReduction) / (1-((socialInsurancePercent + healthInsurancePercent + unEmployedInsurancePercent)/100))
                 income ={...income, VND: grossValue, USD: 0}
                 return calculateNetSalary({income: income, insurance: insurance, reduction: reduction})
